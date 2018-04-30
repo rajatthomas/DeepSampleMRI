@@ -37,7 +37,7 @@ if __name__ == '__main__':
 
     if not opt.no_train:
         print('Setting up train_loader')
-        training_data = get_data_set(opt, split='train_3d')
+        training_data = get_data_set(opt, split='train')
         train_loader = DataLoader(
             training_data,
             batch_size=opt.batch_size,
@@ -68,7 +68,7 @@ if __name__ == '__main__':
 
     if not opt.no_val:
         print('Setting up validation_loader')
-        validation_data = get_data_set(opt, split='valid_3d')
+        validation_data = get_data_set(opt, split='valid')
         val_loader = DataLoader(
             validation_data,
             batch_size=opt.batch_size,
@@ -132,7 +132,7 @@ if __name__ == '__main__':
 
     if not opt.no_test:
         print('Setting up test_loader')
-        test_data = get_data_set(opt, split='test_3d')
+        test_data = get_data_set(opt, split='test')
         test_loader = torch.utils.data.DataLoader(
             test_data,
             batch_size=opt.batch_size,
