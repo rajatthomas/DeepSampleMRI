@@ -177,6 +177,8 @@ class ResNet(nn.Module):
         return nn.Sequential(*layers)
 
     def forward(self, x):
+
+        #import pdb; pdb.set_trace()
         x = self.conv1(x)
         x = self.bn1(x)
         x = self.relu(x)
@@ -194,7 +196,6 @@ class ResNet(nn.Module):
         #s2 = x.shape
         x = x.view(x.size(0), -1)
         #s3 = x.shape
-        #import pdb; pdb.set_trace()
         x = self.fc(x)
         #s4 = x.shape
         return x

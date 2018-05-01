@@ -94,7 +94,7 @@ if __name__ == '__main__':
         def __init__(self):
             self.nsteps_similar_loss = 0
             self.previous_loss = 9999.0
-            self.delta_loss = 0.01
+            self.delta_loss = 0.001
 
         def _increment_step(self):
             self.nsteps_similar_loss += 1

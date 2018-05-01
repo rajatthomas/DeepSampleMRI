@@ -20,6 +20,7 @@ def train_epoch(epoch, data_loader, model, criterion, optimizer, opt,
     end_time = time.time()
     for i, (inputs, targets) in enumerate(data_loader):
         data_time.update(time.time() - end_time)
+        import pdb; pdb.set_trace()
 
         if not opt.no_cuda:
             targets = targets.cuda(async=True)

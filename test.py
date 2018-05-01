@@ -1,10 +1,33 @@
 from torch.autograd import Variable
 import time
+import numpy as np
+import torch
 
 from utils import AverageMeter, calculate_accuracy
+import glob as glob
 
 
-def test_epoch(data_loader, model, criterion, opt, logger):
+def load_subject_data(dir_name, opt):
+
+    all_patches = glob.glob(dir_name)
+    DX = dir_name.split('_')[1]
+    batch_size = len(all_patches)
+
+    if DX == 'ASD':
+        targets = np.ones(batch_size)
+    else:
+        targets = np.zeros(batch_size)
+
+    size_x, size_y, size_z = opt.image_size
+    inputs = np.zeros((batch_size, 1, size_x, size_y, size_z))
+
+    for i,p in enumerate(all_patches):
+        inputs[i, 1, :, :, :] = np.load(p)
+
+    return torch.from_numpy(inputs).type(torch.FloatTensor), torch.from_numpy(targets).type(torch.LongTensor)
+
+
+def test_epoch(test_subjects_list, model, criterion, opt, logger):
 
     model.eval()
 
@@ -14,7 +37,11 @@ def test_epoch(data_loader, model, criterion, opt, logger):
     accuracies = AverageMeter()
 
     end_time = time.time()
-    for i, (inputs, targets) in enumerate(data_loader):
+
+    for f in test_subjects_list:
+
+        inputs, targets = load_subject_data(f, opt)
+
         data_time.update(time.time() - end_time)
 
         if not opt.no_cuda:
