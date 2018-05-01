@@ -5,12 +5,16 @@ import torch
 
 from utils import AverageMeter, calculate_accuracy
 import glob as glob
+import os
 
 
 def load_subject_data(dir_name, opt):
 
-    all_patches = glob.glob(dir_name)
+
     DX = dir_name.split('_')[1]
+    dir_name = os.path.join(opt.root_path, dir_name)
+    all_patches = glob.glob(dir_name+'/*.npy')
+
     batch_size = len(all_patches)
 
     if DX == 'ASD':
@@ -21,8 +25,11 @@ def load_subject_data(dir_name, opt):
     size_x, size_y, size_z = opt.image_size
     inputs = np.zeros((batch_size, 1, size_x, size_y, size_z))
 
-    for i,p in enumerate(all_patches):
+    for i, p in enumerate(all_patches):
+        import pdb; pdb.set_trace()
         inputs[i, 1, :, :, :] = np.load(p)
+
+
 
     return torch.from_numpy(inputs).type(torch.FloatTensor), torch.from_numpy(targets).type(torch.LongTensor)
 

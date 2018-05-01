@@ -14,6 +14,12 @@ def parse_opts():
         type=str,
         help='Result directory path')
     parser.add_argument(
+        '--test_subjects_file',
+        default='/data_local/deeplearning/data/ABIDE_patch64/test_subject_dirs.csv',
+        type=str,
+        help='Path to the file containing test_subject_dirs')
+
+    parser.add_argument(
         '--n_classes',
         default=2,
         type=int,
@@ -53,10 +59,10 @@ def parse_opts():
         help='Patience of LR scheduler. See documentation of ReduceLROnPlateau.'
     )
     parser.add_argument(
-        '--batch_size', default=12, type=int, help='Batch Size')
+        '--batch_size', default=24, type=int, help='Batch Size')
     parser.add_argument(
         '--n_epochs',
-        default=70,
+        default=1,
         type=int,
         help='Number of total epochs to run')
     parser.add_argument(

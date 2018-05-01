@@ -8,6 +8,7 @@ from torch.utils.data import DataLoader
 
 from opts import parse_opts
 from model import generate_model
+import pandas as pd
 
 from dataset import get_data_set
 from utils import Logger
@@ -142,5 +143,9 @@ if __name__ == '__main__':
 
         test_logger = Logger(
             os.path.join(opt.result_path, 'test.log'), ['loss', 'acc'])
-        test_loss = test_epoch(test_loader, model, criterion, opt,
+
+        test_subject_dirs = pd.read_csv(opt.test_subjects_file)
+        test_subject_dirs = test_subject_dirs['0'].tolist()
+
+        test_loss = test_epoch(test_subject_dirs, model, criterion, opt,
                                test_logger)
