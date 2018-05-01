@@ -19,17 +19,15 @@ def load_subject_data(dir_name, opt):
 
     if DX == 'ASD':
         targets = np.ones(batch_size)
-    else:
+
+    if DX == 'CON':
         targets = np.zeros(batch_size)
 
     size_x, size_y, size_z = opt.image_size
     inputs = np.zeros((batch_size, 1, size_x, size_y, size_z))
 
     for i, p in enumerate(all_patches):
-        import pdb; pdb.set_trace()
-        inputs[i, 1, :, :, :] = np.load(p)
-
-
+        inputs[i, 0, :, :, :] = np.load(p)
 
     return torch.from_numpy(inputs).type(torch.FloatTensor), torch.from_numpy(targets).type(torch.LongTensor)
 
@@ -62,6 +60,9 @@ def test_epoch(test_subjects_list, model, criterion, opt, logger):
         losses.update(loss.data[0], inputs.size(0))
         accuracies.update(acc, inputs.size(0))
 
+        _, max_loc = torch.max(outputs, 1)
+        avg_correct = sum(max_loc == targets)/len(targets)
+
         batch_time.update(time.time() - end_time)
         end_time = time.time()
 
@@ -70,12 +71,13 @@ def test_epoch(test_subjects_list, model, criterion, opt, logger):
               'Data {data_time.val:.3f} ({data_time.avg:.3f})\t'
               'Loss {loss.val:.4f} ({loss.avg:.4f})\t'
               'Acc {acc.val:.3f} ({acc.avg:.3f})'.format(
-                  len(data_loader),
+                  len(test_subjects_list),
                   batch_time=batch_time,
                   data_time=data_time,
                   loss=losses,
-                  acc=accuracies))
+                  acc=accuracies,
+                  samplecorrect=avg_correct))
 
-    logger.log({'loss': losses.avg, 'acc': accuracies.avg})
+    logger.log({'loss': losses.avg, 'acc': accuracies.avg, 'vote': avg_correct})
 
     return losses.avg
