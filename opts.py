@@ -62,7 +62,7 @@ def parse_opts():
         '--batch_size', default=24, type=int, help='Batch Size')
     parser.add_argument(
         '--n_epochs',
-        default=1,
+        default=500,
         type=int,
         help='Number of total epochs to run')
     parser.add_argument(

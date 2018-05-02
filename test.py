@@ -61,7 +61,7 @@ def test_epoch(test_subjects_list, model, criterion, opt, logger):
         accuracies.update(acc, inputs.size(0))
 
         _, max_loc = torch.max(outputs, 1)
-        avg_correct = sum(max_loc == targets)/len(targets)
+        sample_correct = float(sum(max_loc == targets)/len(targets))
 
         batch_time.update(time.time() - end_time)
         end_time = time.time()
@@ -70,14 +70,15 @@ def test_epoch(test_subjects_list, model, criterion, opt, logger):
               'Time {batch_time.val:.3f} ({batch_time.avg:.3f})\t'
               'Data {data_time.val:.3f} ({data_time.avg:.3f})\t'
               'Loss {loss.val:.4f} ({loss.avg:.4f})\t'
-              'Acc {acc.val:.3f} ({acc.avg:.3f})'.format(
+              'Acc {acc.val:.2f} ({acc.avg:.3f})\t'
+              'Vote {sample_correct:.3f}'.format(
                   len(test_subjects_list),
                   batch_time=batch_time,
                   data_time=data_time,
                   loss=losses,
                   acc=accuracies,
-                  samplecorrect=avg_correct))
+                  sample_correct=sample_correct))
 
-    logger.log({'loss': losses.avg, 'acc': accuracies.avg, 'vote': avg_correct})
+    logger.log({'loss': losses.avg, 'acc': accuracies.avg, 'vote': sample_correct})
 
     return losses.avg
